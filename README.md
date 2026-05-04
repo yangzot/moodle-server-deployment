@@ -52,7 +52,8 @@ Inbound ports opened:
 - 443 (HTTPS)
 
 # Step 3: Connect to Virtual Machine
-ssh azureuser@<your-public-ip>
+
+ssh azureuser@[your-public-ip]
 
 
 # Step 4: Install Nginx
