@@ -150,3 +150,68 @@ https://yourdomain-name-goes-here.com
 
 A padlock icon should appear in the address bar, indicating that the connection is secure. Clicking on the padlock allows verification of the certificate issuer and details.
 
+#step 7: Install and Configure Database (MariaDB)
+Install MariaDB, which will store all Moodle data like users, courses, and files.
+sudo apt install mariadb-server mariadb-client -y
+
+Start and enable service:
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+
+Secure MariaDB
+sudo mysql_secure_installation
+
+Create a dedicated database and user for Moodle to improve security.
+sudo mysql -u root -p
+CREATE DATABASE moodle DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'moodleuser'@'localhost' IDENTIFIED BY 'StrongPassword';
+GRANT ALL PRIVILEGES ON moodle.* TO 'moodleuser'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+#Step 8: Install PHP and required extensions so Moodle can run properly.
+sudo apt install php-fpm php-mysql php-xml php-curl php-zip php-gd php-mbstring php-intl php-soap php-cli unzip git -y
+
+sudo systemctl restart php8.1-fpm
+
+#Step 9: Install Moodle
+Download Moodle source code from GitHub and use a stable version
+cd /var/www/
+sudo git clone https://github.com/moodle/moodle.git
+cd moodle
+sudo git branch --track MOODLE_401_STABLE origin/MOODLE_401_STABLE
+sudo git checkout MOODLE_401_STABLE
+
+Create Moodle Data Directory
+sudo mkdir /var/moodledata
+sudo chown -R www-data:www-data /var/moodledata
+sudo chmod -R 770 /var/moodledata
+
+Set Permissions
+Give the web server permission to access Moodle files.
+sudo chown -R www-data:www-data /var/www/moodle
+sudo chmod -R 755 /var/www/moodle
+
+
+#Step 10: Configure Nginx for Moodle
+onfigure Nginx to serve Moodle and connect it with PHP and HTTPS.
+
+sudo nano /etc/nginx/sites-available/yourdomain
+
+
+sudo nginx -t
+sudo systemctl reload nginx
+
+#Step 11: Run Moodle Installer
+Complete the setup using the web interface in your browser.
+   https://vle-edu.org
+
+Choose language
+Enter database details
+Create admin account
+
+
+
+
+
+
